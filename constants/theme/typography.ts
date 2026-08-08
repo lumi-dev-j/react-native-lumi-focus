@@ -11,6 +11,7 @@ export const fontFamily = {
 } as const;
 
 export const typography = {
+  logo: { fontFamily: fontFamily.bold, fontSize: 40, lineHeight: 40 * 1.2 },
   h1: { fontFamily: fontFamily.bold, fontSize: 32, lineHeight: 32 * 1.2 },
   h2: { fontFamily: fontFamily.semiBold, fontSize: 24, lineHeight: 24 * 1.3 },
   h3: { fontFamily: fontFamily.semiBold, fontSize: 20, lineHeight: 20 * 1.3 },
