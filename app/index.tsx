@@ -1,75 +1,41 @@
-import { ScrollView, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 
-const primarySwatches = [
-  { name: "Lavender", className: "bg-primary-lavender" },
-  { name: "Peach", className: "bg-primary-peach" },
-  { name: "Sage", className: "bg-primary-sage" },
-  { name: "Gold", className: "bg-primary-gold" },
-];
+import { images } from "@/constants/images";
 
-const semanticSwatches = [
-  { name: "Success", className: "bg-success" },
-  { name: "Warning", className: "bg-warning" },
-  { name: "Streak", className: "bg-streak" },
-  { name: "Error", className: "bg-error" },
-  { name: "Info", className: "bg-info" },
-];
+// Source crop is a 608x608 square — NativeWind can't reliably derive Image
+// height from a className aspect-ratio, so the size is set explicitly here.
+const MASCOT_SIZE = 330;
 
-function Swatch({ name, className }: { name: string; className: string }) {
+export default function SplashScreen() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Temporary minimum display time until a real readiness check (auth,
+    // store hydration) naturally gates this redirect.
+    const timeout = setTimeout(() => {
+      router.replace("/timer");
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, [router]);
+
   return (
-    <View className="items-center gap-2">
-      <View className={`h-14 w-14 rounded-2xl ${className}`} />
-      <Text className="text-caption text-muted-foreground">{name}</Text>
+    <View className="flex-1 items-center justify-center bg-splash-background">
+      <Image
+        source={images.splashMascot}
+        resizeMode="contain"
+        style={styles.mascot}
+      />
+      <Text className="text-logo text-ink mt-3">Lumi Focus</Text>
     </View>
   );
 }
 
-export default function Index() {
-  return (
-    <ScrollView className="flex-1 bg-background">
-      <View className="gap-8 px-6 py-16">
-        <View className="gap-1">
-          <Text className="text-h1 text-foreground">Lumi Focus</Text>
-          <Text className="text-body-lg text-muted-foreground">
-            Cozy Companion
-          </Text>
-        </View>
-
-        <View className="gap-3">
-          <Text className="text-h3 text-foreground">Primary</Text>
-          <View className="flex-row gap-4">
-            {primarySwatches.map((swatch) => (
-              <Swatch key={swatch.name} {...swatch} />
-            ))}
-          </View>
-        </View>
-
-        <View className="gap-3">
-          <Text className="text-h3 text-foreground">Semantic</Text>
-          <View className="flex-row gap-4">
-            {semanticSwatches.map((swatch) => (
-              <Swatch key={swatch.name} {...swatch} />
-            ))}
-          </View>
-        </View>
-
-        <View className="gap-3 rounded-2xl border border-border bg-surface p-4">
-          <Text className="text-h2 text-foreground">H2 Section Title</Text>
-          <Text className="text-h4 text-foreground">H4 Subheading</Text>
-          <Text className="text-body-lg text-foreground">
-            Body Large — important content
-          </Text>
-          <Text className="text-body-md text-muted-foreground">
-            Body Medium — body text
-          </Text>
-          <Text className="text-body-sm text-muted-foreground">
-            Body Small — supporting text
-          </Text>
-          <Text className="text-caption text-muted-foreground">
-            CAPTION — LABELS, META TEXT
-          </Text>
-        </View>
-      </View>
-    </ScrollView>
-  );
-}
+const styles = StyleSheet.create({
+  mascot: {
+    width: MASCOT_SIZE,
+    height: MASCOT_SIZE,
+  },
+});

@@ -23,5 +23,9 @@ export const colors = {
     border: "#D9D9D9",
     surface: "#FAF8F6",
     background: "#FFFDFB",
+    ink: "#111311",
+  },
+  splash: {
+    background: "#D9D0E2",
   },
 } as const;
