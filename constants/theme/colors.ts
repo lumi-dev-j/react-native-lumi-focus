@@ -28,4 +28,13 @@ export const colors = {
   splash: {
     background: "#D9D0E2",
   },
+  timer: {
+    background: "#F3EFF6",
+    surface: "#F8F5FA",
+    surfaceSelected: "#EFEAF6",
+    track: "#E7E2EE",
+    purple: "#9785C6",
+    ink: "#241C3D",
+    muted: "#6F5F93",
+  },
 } as const;
