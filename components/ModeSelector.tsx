@@ -14,9 +14,9 @@ type ModeSelectorProps = {
 
 function ModeIcon({ mode, color }: { mode: TimerMode; color: string }) {
   if (mode.icon.set === "ionicons") {
-    return <Ionicons name={mode.icon.name as never} size={26} color={color} />;
+    return <Ionicons name={mode.icon.name as never} size={20} color={color} />;
   }
-  return <MaterialCommunityIcons name={mode.icon.name as never} size={26} color={color} />;
+  return <MaterialCommunityIcons name={mode.icon.name as never} size={20} color={color} />;
 }
 
 export function ModeSelector({ modes, selectedKey, onSelect }: ModeSelectorProps) {
@@ -36,15 +36,19 @@ export function ModeSelector({ modes, selectedKey, onSelect }: ModeSelectorProps
             {showDivider && <View className="w-px my-4 bg-timer-track" />}
             <Pressable
               onPress={() => onSelect(mode.key)}
-              className={`flex-1 items-center justify-center gap-2 py-4 rounded-3xl ${
+              className={`flex-1 flex-row items-center gap-1 px-1.5 py-3 rounded-2xl ${
                 isSelected ? "bg-timer-surface-selected" : ""
               }`}
             >
               <ModeIcon mode={mode} color={tintColor} />
-              <Text className="text-h4" style={{ color: tintColor }}>
-                {mode.label}
-              </Text>
-              <Text className="text-body-sm text-timer-muted">{mode.durationMinutes} min</Text>
+              <View className="shrink">
+                <Text className="text-h5" numberOfLines={1} style={{ color: tintColor }}>
+                  {mode.label}
+                </Text>
+                <Text className="text-caption text-timer-muted" numberOfLines={1}>
+                  {mode.durationMinutes} min
+                </Text>
+              </View>
             </Pressable>
           </View>
         );
