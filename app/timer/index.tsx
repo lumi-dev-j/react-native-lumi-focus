@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Image, Text, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -10,10 +9,14 @@ import { TimerRing } from "@/components/TimerRing";
 import { images } from "@/constants/images";
 import { illustrationSets } from "@/data/illustrations";
 import { timerModes } from "@/data/timerModes";
-import { TimerModeKey } from "@/types/timer";
+import { useTimerCountdown } from "@/hooks/useTimerCountdown";
+import { useTimerStore } from "@/store/timerStore";
 
-function formatDuration(minutes: number) {
-  return `${String(minutes).padStart(2, "0")}:00`;
+function formatTime(totalSeconds: number) {
+  const clamped = Math.max(0, totalSeconds);
+  const minutes = Math.floor(clamped / 60);
+  const seconds = clamped % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
 // Native size of snow_background.png — used to scale it to the screen width
@@ -32,9 +35,23 @@ const RING_SIZE_RATIO = 0.68;
 const RING_GAP_COMPENSATION_RATIO = 0.16;
 
 export default function TimerScreen() {
-  const [selectedKey, setSelectedKey] = useState<TimerModeKey>("focus");
-  const selectedMode = timerModes.find((mode) => mode.key === selectedKey)!;
-  const buttonLabel = selectedMode.key === "focus" ? "Start Focus" : "Start Break";
+  useTimerCountdown();
+
+  const mode = useTimerStore((state) => state.mode);
+  const status = useTimerStore((state) => state.status);
+  const remainingSeconds = useTimerStore((state) => state.remainingSeconds);
+  const selectMode = useTimerStore((state) => state.selectMode);
+  const toggle = useTimerStore((state) => state.toggle);
+
+  const selectedMode = timerModes.find((timerMode) => timerMode.key === mode)!;
+  const durationSeconds = selectedMode.durationMinutes * 60;
+  const progress = 1 - remainingSeconds / durationSeconds;
+
+  const modeLabelSuffix = selectedMode.key === "focus" ? "Focus" : "Break";
+  const buttonLabel =
+    status === "running" ? "Pause" : status === "paused" ? `Resume ${modeLabelSuffix}` : `Start ${modeLabelSuffix}`;
+  const buttonIcon = status === "running" ? "pause" : "play";
+
   const { width: windowWidth } = useWindowDimensions();
   const ringSize = Math.round(windowWidth * RING_SIZE_RATIO);
 
@@ -75,9 +92,10 @@ export default function TimerScreen() {
 
           <View className="items-center mt-3">
             <TimerRing
-              timeLabel={formatDuration(selectedMode.durationMinutes)}
+              timeLabel={formatTime(remainingSeconds)}
               caption={selectedMode.caption}
               size={ringSize}
+              progress={progress}
             />
           </View>
 
@@ -94,14 +112,10 @@ export default function TimerScreen() {
             <SceneIllustration illustration={illustrationSets.cozyRoom} />
           </View>
 
-          <PrimaryButton label={buttonLabel} icon="play" />
+          <PrimaryButton label={buttonLabel} icon={buttonIcon} onPress={toggle} />
 
           <View className="mt-4">
-            <ModeSelector
-              modes={timerModes}
-              selectedKey={selectedKey}
-              onSelect={setSelectedKey}
-            />
+            <ModeSelector modes={timerModes} selectedKey={mode} onSelect={selectMode} />
           </View>
         </View>
       </SafeAreaView>
