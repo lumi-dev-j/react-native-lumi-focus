@@ -39,6 +39,15 @@
 
   /* Splash screen */
   --color-splash-background: #d9d0e2;
+
+  /* Timer screen (main screen) — sourced from prompt_material/timer.png */
+  --color-timer-background: #f3eff6;
+  --color-timer-surface: #f8f5fa;
+  --color-timer-surface-selected: #efeaf6;
+  --color-timer-track: #e7e2ee;
+  --color-timer-purple: #9785c6;
+  --color-timer-ink: #241c3d;
+  --color-timer-muted: #6f5f93;
 }
 
 /**
@@ -51,6 +60,12 @@
   font-family: var(--font-poppins-bold);
   font-size: 40px;
   line-height: 1.2;
+}
+
+@utility text-timer-time {
+  font-family: var(--font-poppins-bold);
+  font-size: 64px;
+  line-height: 1.15;
 }
 
 @utility text-h1 {
