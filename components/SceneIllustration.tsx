@@ -31,17 +31,24 @@ export function SceneIllustration({ illustration }: SceneIllustrationProps) {
     setContainerSize({ width, height });
   }
 
+  // Contain-fit the frame to its own aspect ratio first, then let the box
+  // top-anchor *that* size — sizing the Image element to the full box (with
+  // resizeMode="contain" doing the fitting) would center the artwork inside
+  // it instead, since contain always centers within the Image's own frame.
+  const { width: boxWidth, height: boxHeight } = containerSize;
+  const boxAspect = boxHeight > 0 ? boxWidth / boxHeight : 0;
+  const fitSize =
+    boxAspect > illustration.aspectRatio
+      ? { width: boxHeight * illustration.aspectRatio, height: boxHeight }
+      : { width: boxWidth, height: boxWidth / illustration.aspectRatio };
+
   return (
     // justify-start (not center) anchors the frame to the top of its box —
     // right under the timer — so any leftover space falls below it, near
     // the button, instead of splitting evenly above and below.
     <View className="w-full h-full items-center justify-start" onLayout={handleLayout}>
-      {containerSize.width > 0 && containerSize.height > 0 && (
-        <Image
-          source={illustration.frames[frameIndex]}
-          resizeMode="contain"
-          style={{ width: containerSize.width, height: containerSize.height }}
-        />
+      {boxWidth > 0 && boxHeight > 0 && (
+        <Image source={illustration.frames[frameIndex]} resizeMode="contain" style={fitSize} />
       )}
     </View>
   );

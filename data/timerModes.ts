@@ -6,7 +6,7 @@ export const timerModes: TimerMode[] = [
     label: "Focus",
     durationMinutes: 25,
     caption: "Good things take time.",
-    icon: { set: "materialCommunityIcons", name: "food-apple-outline" },
+    icon: { set: "ionicons", name: "timer-outline" },
   },
   {
     key: "shortBreak",

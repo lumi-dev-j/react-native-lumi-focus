@@ -32,7 +32,7 @@ export function TimerRing({ timeLabel, caption, size = 300 }: TimerRingProps) {
           cx={center}
           cy={center}
           r={radius}
-          stroke={colors.timer.track}
+          stroke={colors.timer.ringTrack}
           strokeWidth={STROKE_WIDTH}
           strokeLinecap="round"
           strokeDasharray={dashArray}
@@ -44,7 +44,7 @@ export function TimerRing({ timeLabel, caption, size = 300 }: TimerRingProps) {
           cx={center}
           cy={center}
           r={radius}
-          stroke={colors.timer.purple}
+          stroke={colors.timer.ringProgress}
           strokeWidth={STROKE_WIDTH}
           strokeLinecap="round"
           strokeDasharray={dashArray}
@@ -53,7 +53,7 @@ export function TimerRing({ timeLabel, caption, size = 300 }: TimerRingProps) {
         />
       </Svg>
       <Text className="text-timer-time text-white">{timeLabel}</Text>
-      <Text className="text-body-lg text-white/80 mt-2">{caption}</Text>
+      <Text className="text-body-lg text-white/90 mt-2">{caption}</Text>
     </View>
   );
 }

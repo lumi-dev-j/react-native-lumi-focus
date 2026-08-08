@@ -8,5 +8,6 @@ export const illustrationSets: Record<string, IllustrationSet> = {
     key: "cozyRoom",
     frames: [images.girlCoffeeCat1, images.girlCoffeeCat2],
     frameDurationMs: 900,
+    aspectRatio: 744 / 862,
   },
 };

@@ -24,9 +24,9 @@ function IconAction({
     <Pressable onPress={onPress} className="items-center gap-2">
       <View
         style={softShadow}
-        className="w-14 h-14 rounded-full bg-timer-surface items-center justify-center"
+        className="w-11 h-11 rounded-full bg-timer-glass items-center justify-center"
       >
-        <Ionicons name={icon} size={22} color={colors.timer.ink} />
+        <Ionicons name={icon} size={18} color={colors.timer.ink} />
       </View>
       <Text className="text-caption text-timer-ink">{label}</Text>
     </Pressable>
@@ -46,10 +46,10 @@ export function TimerHeader({
       <Pressable
         onPress={onPressScene}
         style={softShadow}
-        className="flex-row items-center gap-2 px-5 h-14 rounded-full bg-timer-surface"
+        className="flex-row items-center gap-2 px-4 h-11 rounded-full bg-timer-glass"
       >
         <Text className="text-h4 text-timer-ink">{sceneName}</Text>
-        <Ionicons name="chevron-down" size={18} color={colors.timer.ink} />
+        <Ionicons name="chevron-down" size={16} color={colors.timer.ink} />
       </Pressable>
 
       <IconAction icon="settings-outline" label="Settings" onPress={onPressSettings} />

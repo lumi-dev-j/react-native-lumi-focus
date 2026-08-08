@@ -23,13 +23,20 @@ const BACKGROUND_ASPECT_RATIO = 852 / 1846;
 
 // Ring diameter as a share of screen width, so it stays the primary focal
 // point (and stays proportional) across device sizes.
-const RING_SIZE_RATIO = 0.58;
+const RING_SIZE_RATIO = 0.68;
+
+// TimerRing draws an open gauge, not a full circle — it leaves a gap at the
+// bottom, so a chunk of the ring's own square bounding box under the visible
+// arc is empty. Pulling the illustration up by a share of the ring's size
+// compensates for that dead space instead of leaving it as a visual gap.
+const RING_GAP_COMPENSATION_RATIO = 0.16;
 
 export default function TimerScreen() {
   const [selectedKey, setSelectedKey] = useState<TimerModeKey>("focus");
   const selectedMode = timerModes.find((mode) => mode.key === selectedKey)!;
   const buttonLabel = selectedMode.key === "focus" ? "Start Focus" : "Start Break";
   const { width: windowWidth } = useWindowDimensions();
+  const ringSize = Math.round(windowWidth * RING_SIZE_RATIO);
 
   return (
     <View className="flex-1 overflow-hidden">
@@ -57,7 +64,7 @@ export default function TimerScreen() {
 
           <View className="items-center mt-3">
             <View
-              className="flex-row items-center gap-2 px-4 h-10 rounded-full bg-timer-surface"
+              className="flex-row items-center gap-2 px-4 h-11 rounded-full bg-timer-glass"
             >
               <View className="w-2.5 h-2.5 rounded-full bg-timer-purple" />
               <Text className="text-h4 text-timer-ink tracking-wide">
@@ -70,7 +77,7 @@ export default function TimerScreen() {
             <TimerRing
               timeLabel={formatDuration(selectedMode.durationMinutes)}
               caption={selectedMode.caption}
-              size={Math.round(windowWidth * RING_SIZE_RATIO)}
+              size={ringSize}
             />
           </View>
 
@@ -80,7 +87,10 @@ export default function TimerScreen() {
               SceneIllustration anchors its frame to the top of this box
               (tight against the ring) and always scales to fit without
               cropping, distorting, or overflowing into neighboring UI. */}
-          <View className="flex-1">
+          <View
+            className="flex-1"
+            style={{ marginTop: -Math.round(ringSize * RING_GAP_COMPENSATION_RATIO) }}
+          >
             <SceneIllustration illustration={illustrationSets.cozyRoom} />
           </View>
 
