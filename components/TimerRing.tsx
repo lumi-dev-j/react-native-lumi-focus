@@ -52,8 +52,8 @@ export function TimerRing({ timeLabel, caption, size = 300 }: TimerRingProps) {
           transform={`rotate(${-90 - ARC_DEGREES} ${center} ${center})`}
         />
       </Svg>
-      <Text className="text-timer-time text-timer-ink">{timeLabel}</Text>
-      <Text className="text-body-lg text-timer-muted mt-2">{caption}</Text>
+      <Text className="text-timer-time text-white">{timeLabel}</Text>
+      <Text className="text-body-lg text-white/80 mt-2">{caption}</Text>
     </View>
   );
 }

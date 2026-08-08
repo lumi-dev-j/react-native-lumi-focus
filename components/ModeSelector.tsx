@@ -23,7 +23,7 @@ export function ModeSelector({ modes, selectedKey, onSelect }: ModeSelectorProps
   return (
     <View
       style={softShadow}
-      className="flex-row items-stretch bg-timer-surface rounded-[28px] p-2"
+      className="flex-row items-stretch bg-timer-surface rounded-[24px] p-1.5"
     >
       {modes.map((mode, index) => {
         const isSelected = mode.key === selectedKey;
@@ -33,10 +33,10 @@ export function ModeSelector({ modes, selectedKey, onSelect }: ModeSelectorProps
 
         return (
           <View key={mode.key} className="flex-1 flex-row items-stretch">
-            {showDivider && <View className="w-px my-4 bg-timer-track" />}
+            {showDivider && <View className="w-px my-3 bg-timer-track" />}
             <Pressable
               onPress={() => onSelect(mode.key)}
-              className={`flex-1 items-center justify-center gap-2 py-4 rounded-3xl ${
+              className={`flex-1 items-center justify-center gap-1 py-3 rounded-3xl ${
                 isSelected ? "bg-timer-surface-selected" : ""
               }`}
             >

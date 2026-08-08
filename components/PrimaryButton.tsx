@@ -14,7 +14,7 @@ export function PrimaryButton({ label, icon, onPress }: PrimaryButtonProps) {
     <Pressable
       onPress={onPress}
       style={softShadow}
-      className="flex-row items-center justify-center gap-3 h-16 rounded-full bg-timer-purple active:opacity-90"
+      className="flex-row items-center justify-center gap-3 h-14 rounded-full bg-timer-purple active:opacity-90"
     >
       {icon && <Ionicons name={icon} size={20} color="white" />}
       <Text className="text-h3 text-white">{label}</Text>
