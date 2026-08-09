@@ -1,13 +1,16 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Pressable, Text, View } from "react-native";
 
+import { EnvironmentDropdown } from "@/components/EnvironmentDropdown";
 import { softShadow } from "@/constants/shadows";
 import { colors } from "@/constants/theme";
+import { EnvironmentTheme } from "@/types/theme";
 
 type TimerHeaderProps = {
-  sceneName: string;
+  themes: EnvironmentTheme[];
+  selectedThemeId: string;
+  onSelectTheme: (themeId: string) => void;
   onPressSounds?: () => void;
-  onPressScene?: () => void;
   onPressSettings?: () => void;
 };
 
@@ -34,23 +37,21 @@ function IconAction({
 }
 
 export function TimerHeader({
-  sceneName,
+  themes,
+  selectedThemeId,
+  onSelectTheme,
   onPressSounds,
-  onPressScene,
   onPressSettings,
 }: TimerHeaderProps) {
   return (
     <View className="flex-row items-start justify-between">
       <IconAction icon="musical-notes-outline" label="Sounds" onPress={onPressSounds} />
 
-      <Pressable
-        onPress={onPressScene}
-        style={softShadow}
-        className="flex-row items-center gap-2 px-4 h-11 rounded-full bg-timer-glass"
-      >
-        <Text className="text-h4 text-timer-ink">{sceneName}</Text>
-        <Ionicons name="chevron-down" size={16} color={colors.timer.ink} />
-      </Pressable>
+      <EnvironmentDropdown
+        themes={themes}
+        selectedThemeId={selectedThemeId}
+        onSelectTheme={onSelectTheme}
+      />
 
       <IconAction icon="settings-outline" label="Settings" onPress={onPressSettings} />
     </View>
