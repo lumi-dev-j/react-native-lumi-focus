@@ -9,7 +9,9 @@ import { TimerHeader } from "@/components/TimerHeader";
 import { TimerRing } from "@/components/TimerRing";
 import { environmentThemes } from "@/data/themes";
 import { timerModes } from "@/data/timerModes";
+import { useThemeAudio } from "@/hooks/useThemeAudio";
 import { useTimerCountdown } from "@/hooks/useTimerCountdown";
+import { useSoundStore } from "@/store/soundStore";
 import { useThemeStore } from "@/store/themeStore";
 import { useTimerStore } from "@/store/timerStore";
 
@@ -56,6 +58,10 @@ export default function TimerScreen() {
   const selectedTheme =
     environmentThemes.find((theme) => theme.id === themeId) ?? environmentThemes[0];
 
+  const isAudioMuted = useSoundStore((state) => state.isMuted);
+  const toggleAudioMuted = useSoundStore((state) => state.toggleMuted);
+  useThemeAudio(selectedTheme, isAudioMuted);
+
   return (
     <View className="flex-1 overflow-hidden">
       {/* Anchored to the bottom and sized by width so the scene at the
@@ -83,6 +89,8 @@ export default function TimerScreen() {
             themes={environmentThemes}
             selectedThemeId={themeId}
             onSelectTheme={selectTheme}
+            isAudioMuted={isAudioMuted}
+            onToggleAudio={toggleAudioMuted}
           />
 
           <View className="items-center mt-3">

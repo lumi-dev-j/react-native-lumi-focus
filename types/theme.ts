@@ -10,4 +10,6 @@ export type EnvironmentTheme = {
    * screen width without distortion while staying bottom-anchored. */
   backgroundAspectRatio: number;
   illustration: IllustrationSet;
+  /** Ambient background audio that loops while this theme is active. */
+  audio: number;
 };
