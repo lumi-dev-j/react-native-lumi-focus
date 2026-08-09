@@ -1,4 +1,5 @@
-import { Image, Text, View, useWindowDimensions } from "react-native";
+import { Image } from "expo-image";
+import { Text, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ModeSelector } from "@/components/ModeSelector";
@@ -6,10 +7,10 @@ import { PrimaryButton } from "@/components/PrimaryButton";
 import { SceneIllustration } from "@/components/SceneIllustration";
 import { TimerHeader } from "@/components/TimerHeader";
 import { TimerRing } from "@/components/TimerRing";
-import { images } from "@/constants/images";
-import { illustrationSets } from "@/data/illustrations";
+import { environmentThemes } from "@/data/themes";
 import { timerModes } from "@/data/timerModes";
 import { useTimerCountdown } from "@/hooks/useTimerCountdown";
+import { useThemeStore } from "@/store/themeStore";
 import { useTimerStore } from "@/store/timerStore";
 
 function formatTime(totalSeconds: number) {
@@ -18,11 +19,6 @@ function formatTime(totalSeconds: number) {
   const seconds = clamped % 60;
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
-
-// Native size of snow_background.png — used to scale it to the screen width
-// without distortion while keeping it bottom-anchored, so the cabin/treeline
-// at the bottom of the artwork is always shown.
-const BACKGROUND_ASPECT_RATIO = 852 / 1846;
 
 // Ring diameter as a share of screen width, so it stays the primary focal
 // point (and stays proportional) across device sizes.
@@ -55,20 +51,26 @@ export default function TimerScreen() {
   const { width: windowWidth } = useWindowDimensions();
   const ringSize = Math.round(windowWidth * RING_SIZE_RATIO);
 
+  const themeId = useThemeStore((state) => state.themeId);
+  const selectTheme = useThemeStore((state) => state.selectTheme);
+  const selectedTheme =
+    environmentThemes.find((theme) => theme.id === themeId) ?? environmentThemes[0];
+
   return (
     <View className="flex-1 overflow-hidden">
-      {/* Anchored to the bottom and sized by width so the snow/cabin scene at
-          the bottom of the artwork always stays fully visible — only the
+      {/* Anchored to the bottom and sized by width so the scene at the
+          bottom of the artwork always stays fully visible — only the
           plain sky at the top gets clipped if the screen is relatively short. */}
       <Image
-        source={images.snowBackground}
-        resizeMode="cover"
+        source={selectedTheme.background}
+        contentFit="cover"
+        transition={150}
         style={{
           position: "absolute",
           bottom: 0,
           left: 0,
           width: windowWidth,
-          height: windowWidth / BACKGROUND_ASPECT_RATIO,
+          height: windowWidth / selectedTheme.backgroundAspectRatio,
         }}
       />
       {/* Keeps the artwork subtle so the timer, illustration, and button —
@@ -77,7 +79,11 @@ export default function TimerScreen() {
 
       <SafeAreaView style={{ flex: 1 }}>
         <View className="flex-1 px-6 pt-2">
-          <TimerHeader sceneName="Cozy Room" />
+          <TimerHeader
+            themes={environmentThemes}
+            selectedThemeId={themeId}
+            onSelectTheme={selectTheme}
+          />
 
           <View className="items-center mt-3">
             <View
@@ -109,7 +115,7 @@ export default function TimerScreen() {
             className="flex-1"
             style={{ marginTop: -Math.round(ringSize * RING_GAP_COMPENSATION_RATIO) }}
           >
-            <SceneIllustration illustration={illustrationSets.cozyRoom} />
+            <SceneIllustration illustration={selectedTheme.illustration} />
           </View>
 
           <PrimaryButton label={buttonLabel} icon={buttonIcon} onPress={toggle} />

@@ -1,7 +1,10 @@
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import { environmentThemes } from "@/data/themes";
+import { preloadThemes } from "@/lib/imagePreload";
 
 import "../global.css";
 
@@ -15,13 +18,27 @@ export default function RootLayout() {
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
   });
 
+  // Warm every theme's background + illustration frames behind the splash
+  // screen so switching (or even the first paint) never shows a stale or
+  // half-decoded frame. Swallow prefetch failures rather than hanging the
+  // splash screen forever on them.
+  const [themeAssetsReady, setThemeAssetsReady] = useState(false);
+
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    preloadThemes(environmentThemes)
+      .catch(() => {})
+      .finally(() => setThemeAssetsReady(true));
+  }, []);
+
+  const appReady = (fontsLoaded || fontError) && themeAssetsReady;
+
+  useEffect(() => {
+    if (appReady) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [appReady]);
 
-  if (!fontsLoaded && !fontError) {
+  if (!appReady) {
     return null;
   }
 
