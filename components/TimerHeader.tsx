@@ -10,9 +10,29 @@ type TimerHeaderProps = {
   themes: EnvironmentTheme[];
   selectedThemeId: string;
   onSelectTheme: (themeId: string) => void;
-  onPressSounds?: () => void;
+  isAudioMuted: boolean;
+  onToggleAudio?: () => void;
   onPressSettings?: () => void;
 };
+
+function IconButton({
+  icon,
+  onPress,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  onPress?: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress}>
+      <View
+        style={softShadow}
+        className="w-11 h-11 rounded-full bg-timer-glass items-center justify-center"
+      >
+        <Ionicons name={icon} size={18} color={colors.timer.ink} />
+      </View>
+    </Pressable>
+  );
+}
 
 function IconAction({
   icon,
@@ -25,12 +45,7 @@ function IconAction({
 }) {
   return (
     <Pressable onPress={onPress} className="items-center gap-2">
-      <View
-        style={softShadow}
-        className="w-11 h-11 rounded-full bg-timer-glass items-center justify-center"
-      >
-        <Ionicons name={icon} size={18} color={colors.timer.ink} />
-      </View>
+      <IconButton icon={icon} onPress={onPress} />
       <Text className="text-caption text-timer-ink">{label}</Text>
     </Pressable>
   );
@@ -40,12 +55,16 @@ export function TimerHeader({
   themes,
   selectedThemeId,
   onSelectTheme,
-  onPressSounds,
+  isAudioMuted,
+  onToggleAudio,
   onPressSettings,
 }: TimerHeaderProps) {
   return (
     <View className="flex-row items-start justify-between">
-      <IconAction icon="musical-notes-outline" label="Sounds" onPress={onPressSounds} />
+      <IconButton
+        icon={isAudioMuted ? "volume-mute-outline" : "volume-high-outline"}
+        onPress={onToggleAudio}
+      />
 
       <EnvironmentDropdown
         themes={themes}

@@ -1,15 +1,17 @@
+import { audios } from "@/constants/audios";
 import { images } from "@/constants/images";
 import { EnvironmentTheme } from "@/types/theme";
 
 // Add more environments here — each just needs a background, matching
-// illustration frames, and the native aspect ratios (width / height) used
-// to scale both without distortion.
+// illustration frames, ambient audio, and the native aspect ratios
+// (width / height) used to scale the artwork without distortion.
 export const environmentThemes: EnvironmentTheme[] = [
   {
     id: "springMeadow",
     name: "Spring Meadow",
     background: images.springMeadowBackground,
     backgroundAspectRatio: 853 / 1844,
+    audio: audios.springMeadow,
     illustration: {
       key: "springMeadow",
       // Cropped tight to the girl + cat (see assets/images/girl_cat_reading_*.png)
@@ -25,6 +27,7 @@ export const environmentThemes: EnvironmentTheme[] = [
     name: "Snow Cabin",
     background: images.snowCabinBackground,
     backgroundAspectRatio: 852 / 1846,
+    audio: audios.snowCabin,
     illustration: {
       key: "snowCabin",
       frames: [images.girlCoffeeCat1, images.girlCoffeeCat2],
