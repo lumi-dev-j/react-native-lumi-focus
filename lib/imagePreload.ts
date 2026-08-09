@@ -8,9 +8,9 @@ import { EnvironmentTheme } from "@/types/theme";
 // mount with the same source renders instantly instead of decoding on the spot.
 export function preloadTheme(theme: EnvironmentTheme) {
   const sources = [theme.background, ...theme.illustration.frames];
-  return Promise.all(sources.map((source) => Image.loadAsync(source)));
+  return Promise.allSettled(sources.map((source) => Image.loadAsync(source)));
 }
 
 export function preloadThemes(themes: EnvironmentTheme[]) {
-  return Promise.all(themes.map(preloadTheme));
+  return Promise.allSettled(themes.map(preloadTheme));
 }
