@@ -8,9 +8,12 @@ import { TimerStatus } from "@/store/timerStore";
 // "completed" (i.e. it ran out, not paused/reset/mode-switched). Always
 // audible regardless of the theme audio mute toggle. If the theme track is
 // playing, it's paused for the chime and resumed once the chime finishes.
-export function useTimerCompletionSound(status: TimerStatus, themePlayer: AudioPlayer) {
+export function useTimerCompletionSound(status: TimerStatus, themePlayer: AudioPlayer, isMuted: boolean) {
   const completionPlayer = useAudioPlayer(audios.end);
   const previousStatus = useRef(status);
+  // Read at resume time, not pause time — the user may mute mid-chime.
+  const isMutedRef = useRef(isMuted);
+  isMutedRef.current = isMuted;
 
   useEffect(() => {
     const justCompleted = previousStatus.current !== "completed" && status === "completed";
@@ -25,7 +28,7 @@ export function useTimerCompletionSound(status: TimerStatus, themePlayer: AudioP
       subscription.remove();
       // Rewind for the next completion; doesn't block resuming the theme track.
       completionPlayer.seekTo(0);
-      if (wasThemePlaying) themePlayer.play();
+      if (wasThemePlaying && !isMutedRef.current) themePlayer.play();
     });
 
     completionPlayer.play();

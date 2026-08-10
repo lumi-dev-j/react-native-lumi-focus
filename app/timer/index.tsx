@@ -66,7 +66,7 @@ export default function TimerScreen() {
   const isAudioMuted = useSoundStore((state) => state.isMuted);
   const toggleAudioMuted = useSoundStore((state) => state.toggleMuted);
   const themePlayer = useThemeAudio(selectedTheme, isAudioMuted);
-  useTimerCompletionSound(status, themePlayer);
+  useTimerCompletionSound(status, themePlayer, isAudioMuted);
 
   return (
     <View className="flex-1 overflow-hidden">
