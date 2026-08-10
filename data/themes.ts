@@ -35,6 +35,19 @@ export const environmentThemes: EnvironmentTheme[] = [
       aspectRatio: 744 / 862,
     },
   },
+  {
+    id: "spaceTravel",
+    name: "Space Travel",
+    background: images.spaceTravelBackground,
+    backgroundAspectRatio: 853 / 1844,
+    audio: audios.spaceTravel,
+    illustration: {
+      key: "spaceTravel",
+      frames: [images.astronaut1, images.astronaut2],
+      frameDurationMs: 900,
+      aspectRatio: 1536 / 1024,
+    },
+  },
 ];
 
 export const defaultThemeId = environmentThemes[0].id;
