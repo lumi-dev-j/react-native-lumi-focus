@@ -10,6 +10,7 @@ import { TimerRing } from "@/components/TimerRing";
 import { environmentThemes } from "@/data/themes";
 import { timerModes } from "@/data/timerModes";
 import { useThemeAudio } from "@/hooks/useThemeAudio";
+import { useTimerCompletionSound } from "@/hooks/useTimerCompletionSound";
 import { useTimerCountdown } from "@/hooks/useTimerCountdown";
 import { useSoundStore } from "@/store/soundStore";
 import { useThemeStore } from "@/store/themeStore";
@@ -43,7 +44,11 @@ export default function TimerScreen() {
 
   const selectedMode = timerModes.find((timerMode) => timerMode.key === mode)!;
   const durationSeconds = selectedMode.durationMinutes * 60;
-  const progress = 1 - remainingSeconds / durationSeconds;
+  // Once a session completes, show the ring/time as freshly reset (like
+  // idle) rather than frozen at 00:00 — status stays "completed" so the
+  // completion sound hook can still detect the transition.
+  const displaySeconds = status === "completed" ? durationSeconds : remainingSeconds;
+  const progress = status === "completed" ? 0 : 1 - remainingSeconds / durationSeconds;
 
   const modeLabelSuffix = selectedMode.key === "focus" ? "Focus" : "Break";
   const buttonLabel =
@@ -60,7 +65,8 @@ export default function TimerScreen() {
 
   const isAudioMuted = useSoundStore((state) => state.isMuted);
   const toggleAudioMuted = useSoundStore((state) => state.toggleMuted);
-  useThemeAudio(selectedTheme, isAudioMuted);
+  const themePlayer = useThemeAudio(selectedTheme, isAudioMuted);
+  useTimerCompletionSound(status, themePlayer);
 
   return (
     <View className="flex-1 overflow-hidden">
@@ -106,7 +112,7 @@ export default function TimerScreen() {
 
           <View className="items-center mt-3">
             <TimerRing
-              timeLabel={formatTime(remainingSeconds)}
+              timeLabel={formatTime(displaySeconds)}
               caption={selectedMode.caption}
               size={ringSize}
               progress={progress}
