@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { timerModes } from "@/data/timerModes";
+import { useSettingsStore } from "@/store/settingsStore";
 import { TimerModeKey } from "@/types/timer";
 
 export type TimerStatus = "idle" | "running" | "paused" | "completed";
@@ -17,8 +17,7 @@ type TimerState = {
 };
 
 function getDurationSeconds(mode: TimerModeKey) {
-  const found = timerModes.find((timerMode) => timerMode.key === mode);
-  return (found?.durationMinutes ?? 0) * 60;
+  return (useSettingsStore.getState().durations[mode] ?? 0) * 60;
 }
 
 export const useTimerStore = create<TimerState>((set, get) => ({
@@ -62,3 +61,16 @@ export const useTimerStore = create<TimerState>((set, get) => ({
     }
   },
 }));
+
+// Settings screen edits durations independently of the running timer. An
+// idle session should reflect a new duration right away; a running or
+// paused session must not jump mid-countdown, so only "idle" reacts here.
+useSettingsStore.subscribe((state) => {
+  const { mode, status } = useTimerStore.getState();
+  if (status !== "idle") return;
+
+  const durationSeconds = state.durations[mode] * 60;
+  if (durationSeconds !== useTimerStore.getState().remainingSeconds) {
+    useTimerStore.setState({ remainingSeconds: durationSeconds });
+  }
+});

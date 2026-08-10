@@ -1,4 +1,5 @@
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { Text, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -8,10 +9,10 @@ import { SceneIllustration } from "@/components/SceneIllustration";
 import { TimerHeader } from "@/components/TimerHeader";
 import { TimerRing } from "@/components/TimerRing";
 import { environmentThemes } from "@/data/themes";
-import { timerModes } from "@/data/timerModes";
 import { useThemeAudio } from "@/hooks/useThemeAudio";
 import { useTimerCompletionSound } from "@/hooks/useTimerCompletionSound";
 import { useTimerCountdown } from "@/hooks/useTimerCountdown";
+import { useTimerModes } from "@/hooks/useTimerModes";
 import { useSoundStore } from "@/store/soundStore";
 import { useThemeStore } from "@/store/themeStore";
 import { useTimerStore } from "@/store/timerStore";
@@ -35,6 +36,7 @@ const RING_GAP_COMPENSATION_RATIO = 0.16;
 
 export default function TimerScreen() {
   useTimerCountdown();
+  const router = useRouter();
 
   const mode = useTimerStore((state) => state.mode);
   const status = useTimerStore((state) => state.status);
@@ -42,6 +44,7 @@ export default function TimerScreen() {
   const selectMode = useTimerStore((state) => state.selectMode);
   const toggle = useTimerStore((state) => state.toggle);
 
+  const timerModes = useTimerModes();
   const selectedMode = timerModes.find((timerMode) => timerMode.key === mode)!;
   const durationSeconds = selectedMode.durationMinutes * 60;
   // Once a session completes, show the ring/time as freshly reset (like
@@ -97,6 +100,7 @@ export default function TimerScreen() {
             onSelectTheme={selectTheme}
             isAudioMuted={isAudioMuted}
             onToggleAudio={toggleAudioMuted}
+            onPressSettings={() => router.push("/settings")}
           />
 
           <View className="items-center mt-3">
