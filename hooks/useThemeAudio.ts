@@ -25,4 +25,6 @@ export function useThemeAudio(theme: EnvironmentTheme, isMuted: boolean) {
       player.play();
     }
   }, [player, isMuted]);
+
+  return player;
 }
