@@ -48,6 +48,19 @@ export const environmentThemes: EnvironmentTheme[] = [
       aspectRatio: 1536 / 1024,
     },
   },
+  {
+    id: "halloweenRide",
+    name: "Halloween Ride",
+    background: images.halloweenRideBackground,
+    backgroundAspectRatio: 853 / 1844,
+    audio: audios.halloweenRide,
+    illustration: {
+      key: "halloweenRide",
+      frames: [images.girlCatSweep1, images.girlCatSweep2],
+      frameDurationMs: 900,
+      aspectRatio: 1536 / 1024,
+    },
+  },
 ];
 
 export const defaultThemeId = environmentThemes[0].id;
