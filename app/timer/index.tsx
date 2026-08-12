@@ -58,7 +58,7 @@ export default function TimerScreen() {
     status === "running" ? "Pause" : status === "paused" ? `Resume ${modeLabelSuffix}` : `Start ${modeLabelSuffix}`;
   const buttonIcon = status === "running" ? "pause" : "play";
 
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const ringSize = Math.round(windowWidth * RING_SIZE_RATIO);
 
   const themeId = useThemeStore((state) => state.themeId);
@@ -75,7 +75,10 @@ export default function TimerScreen() {
     <View className="flex-1 overflow-hidden">
       {/* Anchored to the bottom and sized by width so the scene at the
           bottom of the artwork always stays fully visible — only the
-          plain sky at the top gets clipped if the screen is relatively short. */}
+          plain sky at the top gets clipped if the screen is relatively short.
+          Height is clamped to the window height so devices whose aspect
+          ratio is slightly wider than the artwork's never leave a gap
+          uncovered above the image. */}
       <Image
         source={selectedTheme.background}
         contentFit="cover"
@@ -85,7 +88,7 @@ export default function TimerScreen() {
           bottom: 0,
           left: 0,
           width: windowWidth,
-          height: windowWidth / selectedTheme.backgroundAspectRatio,
+          height: Math.max(windowWidth / selectedTheme.backgroundAspectRatio, windowHeight),
         }}
       />
       {/* Keeps the artwork subtle so the timer, illustration, and button —
