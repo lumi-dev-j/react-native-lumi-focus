@@ -61,6 +61,45 @@ export const environmentThemes: EnvironmentTheme[] = [
       aspectRatio: 1536 / 1024,
     },
   },
+  {
+    id: "parisRiverside",
+    name: "Paris Riverside",
+    background: images.parisRiversideBackground,
+    backgroundAspectRatio: 853 / 1844,
+    audio: audios.parisRiverside,
+    illustration: {
+      key: "parisRiverside",
+      frames: [images.girlCatWalk1, images.girlCatWalk2],
+      frameDurationMs: 900,
+      aspectRatio: 1536 / 1024,
+    },
+  },
+  {
+    id: "greekSeaside",
+    name: "Greek Seaside",
+    background: images.greekSeasideBackground,
+    backgroundAspectRatio: 853 / 1844,
+    audio: audios.greekSeaside,
+    illustration: {
+      key: "greekSeaside",
+      frames: [images.girlCatSeaside1, images.girlCatSeaside2],
+      frameDurationMs: 900,
+      aspectRatio: 1024 / 1536,
+    },
+  },
+  {
+    id: "oceanAdventure",
+    name: "Ocean Explore",
+    background: images.oceanAdventureBackground,
+    backgroundAspectRatio: 853 / 1844,
+    audio: audios.oceanAdventure,
+    illustration: {
+      key: "oceanAdventure",
+      frames: [images.girlCatDive1, images.girlCatDive2],
+      frameDurationMs: 900,
+      aspectRatio: 1536 / 1024,
+    },
+  },
 ];
 
 export const defaultThemeId = environmentThemes[0].id;
