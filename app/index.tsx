@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 import { images } from "@/constants/images";
 
@@ -28,7 +28,6 @@ export default function SplashScreen() {
         resizeMode="contain"
         style={styles.mascot}
       />
-      <Text className="text-logo text-ink mt-3">Lumi Focus</Text>
     </View>
   );
 }
