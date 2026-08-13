@@ -41,10 +41,7 @@
           "image": "./assets/images/splash-mascot.png",
           "imageWidth": 330,
           "resizeMode": "contain",
-          "backgroundColor": "#d9d0e2",
-          "dark": {
-            "backgroundColor": "#000000"
-          }
+          "backgroundColor": "#d9d0e2"
         }
       ],
       [
@@ -54,7 +51,8 @@
           "recordAudioAndroid": false
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "./plugins/withSplashBackgroundColor.js"
     ],
     "experiments": {
       "typedRoutes": true,
